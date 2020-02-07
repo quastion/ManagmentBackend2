@@ -58,4 +58,8 @@ public class Lobby {
     public void setCreator(String creator) {
         this.creator = creator;
     }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
 }

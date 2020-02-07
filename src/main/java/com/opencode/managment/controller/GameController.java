@@ -1,7 +1,9 @@
 package com.opencode.managment.controller;
 
+import com.opencode.managment.app.Game;
 import com.opencode.managment.dto.LobbyDTO;
 import com.opencode.managment.dto.PlayerDTO;
+import com.opencode.managment.dto.UnknownDTO;
 import com.opencode.managment.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,5 +27,20 @@ public class GameController {
     @PostMapping("/joinLobby")
     public void createLobby(@RequestBody PlayerDTO playerDTO){
         service.joinLobby(playerDTO);
+    }
+
+    @PostMapping("/startGame")
+    public void startGame(@RequestBody UnknownDTO unknownDTO){
+        service.startGame();
+    }
+
+    @PostMapping("/destroyGame")
+    public void destroyGame(@RequestBody UnknownDTO unknownDTO){
+        service.destroyGame();
+    }
+
+    @PostMapping("/finishStep")
+    public void finishStep(@RequestBody UnknownDTO unknownDTO){
+        service.finishStep("UNKNOWN");
     }
 }

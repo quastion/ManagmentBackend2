@@ -1,5 +1,6 @@
 package com.opencode.managment.service;
 
+import com.opencode.managment.app.Game;
 import com.opencode.managment.app.Lobby;
 import com.opencode.managment.app.Player;
 import com.opencode.managment.dto.LobbyDTO;
@@ -14,6 +15,7 @@ public class GameService {
     private GameSessionRepository gameSessionRepository;
     private UserRepository userRepository;
     private Lobby lobby;
+    private Game game;
 
     @Autowired
     public void setProductRepository(GameSessionRepository gameSessionRepository) {
@@ -32,5 +34,20 @@ public class GameService {
     public void joinLobby(PlayerDTO playerDTO){
         if(lobby == null) return;
         lobby.join(new Player(playerDTO));
+    }
+
+    public void startGame(){
+        if(lobby.canStartGame()){
+            game = new Game(lobby);
+        }
+    }
+
+    public void destroyGame(){
+        game = null;
+        lobby = null;
+    }
+
+    public void finishStep(String playerName){
+        game.finishStep(playerName);
     }
 }
