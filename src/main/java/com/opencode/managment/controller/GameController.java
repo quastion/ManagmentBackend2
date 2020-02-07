@@ -25,7 +25,7 @@ public class GameController {
     }
 
     @PostMapping("/joinLobby")
-    public void createLobby(@RequestBody PlayerDTO playerDTO){
+    public void joinLobby(@RequestBody PlayerDTO playerDTO){
         service.joinLobby(playerDTO);
     }
 
