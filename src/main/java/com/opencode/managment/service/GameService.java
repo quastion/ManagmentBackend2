@@ -3,24 +3,16 @@ package com.opencode.managment.service;
 import com.opencode.managment.app.Game;
 import com.opencode.managment.app.Lobby;
 import com.opencode.managment.app.Player;
-import com.opencode.managment.dto.LobbyDTO;
-import com.opencode.managment.dto.PlayerDTO;
-import com.opencode.managment.repository.GameSessionRepository;
+import com.opencode.managment.dto.*;
 import com.opencode.managment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GameService {
-    private GameSessionRepository gameSessionRepository;
     private UserRepository userRepository;
     private Lobby lobby;
     private Game game;
-
-    @Autowired
-    public void setProductRepository(GameSessionRepository gameSessionRepository) {
-        this.gameSessionRepository = gameSessionRepository;
-    }
 
     @Autowired
     public void setRepository(UserRepository userRepository) {
@@ -32,7 +24,7 @@ public class GameService {
     }
 
     public void joinLobby(PlayerDTO playerDTO){
-        if(lobby == null) return;
+        if(isLobbyCreated().getStatus() == 0) return;
         lobby.join(new Player(playerDTO));
     }
 
@@ -47,7 +39,33 @@ public class GameService {
         lobby = null;
     }
 
-    public void finishStep(String playerName){
-        game.finishStep(playerName);
+    public void finishStep(FinishStepIntentionDTO finishStepIntentionDTO){
+        game.finishStep(finishStepIntentionDTO.getUserName());
     }
+
+    public LobbyStatusDto isLobbyCreated(){
+        return new LobbyStatusDto(lobby != null ? 1 : 0);
+    }
+
+    public GameDTO getGameInfo(){
+        if(game == null) throw new Error("Игра не создана!");
+        return GameDTO.createGameInfo(game);
+    }
+
+    // TODO: 08.02.2020 Реализовать торги 
+    public void buyEsm(BuyEsmDTO buyEsmDTO){
+
+    }
+
+    // TODO: 08.02.2020 Реализовать торги
+    public void sellEgp(SellEgpDTO sellEgpDTO){
+
+    }
+
+    // TODO: 08.02.2020 Реализовать 
+    public void getProduct( ProductConversionIntentDTO productConversionIntentDTO){
+        
+    }
+
+    // TODO: 08.02.2020 Реализовать получение ссуды 
 }

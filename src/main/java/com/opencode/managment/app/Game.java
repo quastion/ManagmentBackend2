@@ -11,12 +11,17 @@ public final class Game {
     private static final int COST_PER_AUTOMATED_FACTORY_UNIT = 1500;
 
     private Lobby lobby;
+    private Bank bank;
 
     private HashSet<String> setOfFinishedSteps;
+    private int month;
+    private int crownPlayer;
+    private int currentPlayer;
 
     public Game(Lobby lobby) {
         this.lobby = lobby;
         setOfFinishedSteps = new HashSet<>();
+        bank = new Bank();
     }
 
     public void step(){
@@ -24,6 +29,9 @@ public final class Game {
             payBills(player);
         }
         setOfFinishedSteps.clear();
+        increaseCurrentPlayerNumber();
+        increaseMonth();
+        bank.randomizeLevel();
     }
 
     public void payBills(Player player){
@@ -34,11 +42,48 @@ public final class Game {
     }
 
     public boolean isAllPlayersMoved(){
-        return setOfFinishedSteps.size() >= lobby.getPlayers().size();
+        return setOfFinishedSteps.size() >= getPlayersCount();
     }
 
+    /**
+     * Завершение хода конкретного игрока
+     * @param playerName
+     */
     public void finishStep(String playerName){
         setOfFinishedSteps.add(playerName);
         if(isAllPlayersMoved()) step();
+    }
+
+    private void increaseMonth(){
+        month++;
+    }
+
+    private void increaseCurrentPlayerNumber(){
+        currentPlayer++;
+        if(currentPlayer >= getPlayersCount()) currentPlayer = 0;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getCrownPlayer() {
+        return crownPlayer;
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public int getPlayersCount(){
+        return lobby.getPlayers().size();
+    }
+
+    public ArrayList<Player> getPlayers(){
+        return lobby.getPlayers();
     }
 }

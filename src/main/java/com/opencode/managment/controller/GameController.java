@@ -1,9 +1,7 @@
 package com.opencode.managment.controller;
 
 import com.opencode.managment.app.Game;
-import com.opencode.managment.dto.LobbyDTO;
-import com.opencode.managment.dto.PlayerDTO;
-import com.opencode.managment.dto.UnknownDTO;
+import com.opencode.managment.dto.*;
 import com.opencode.managment.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +15,14 @@ public class GameController {
     @Autowired
     public void setService(GameService service){
         this.service = service;
+    }
+
+    /**
+     * Проверка на существование лобби
+     */
+    @GetMapping("/checkLobby")
+    public LobbyStatusDto checkLobby(){
+        return service.isLobbyCreated();
     }
 
     @PostMapping("/createLobby")
@@ -40,7 +46,31 @@ public class GameController {
     }
 
     @PostMapping("/finishStep")
-    public void finishStep(@RequestBody UnknownDTO unknownDTO){
-        service.finishStep("UNKNOWN");
+    public void finishStep(@RequestBody FinishStepIntentionDTO finishStepIntentionDTO){
+        service.finishStep(finishStepIntentionDTO);
+    }
+
+    @GetMapping("/gameInfo")
+    public GameDTO getGameInfo(){
+        return service.getGameInfo();
+    }
+
+    /**
+     * Купить ЕСМ
+     * @param
+     */
+    @PostMapping("/buyEsm")
+    public void buyEsm(@RequestBody BuyEsmDTO buyEsmDTO){
+        service.buyEsm(buyEsmDTO);
+    }
+
+    @PostMapping("/sellEgp")
+    public void sellEgp(@RequestBody SellEgpDTO sellEgpDTO){
+        service.sellEgp(sellEgpDTO);
+    }
+
+    @PostMapping("/getProduct")
+    public void getProduct(@RequestBody ProductConversionIntentDTO productConversionIntentDTO){
+        service.getProduct(productConversionIntentDTO);
     }
 }

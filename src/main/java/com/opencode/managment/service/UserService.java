@@ -16,11 +16,6 @@ import java.util.ArrayList;
 @Service
 public class UserService {
     private UserRepository repository;
-    private ArrayList<Player> playersOnline;
-
-    {
-        playersOnline = new ArrayList<>();
-    }
 
     @Autowired
     public void setProductRepository(UserRepository repository) {
@@ -35,7 +30,6 @@ public class UserService {
         try{
             repository.save(entity);
             response.setStatus("OK");
-            playersOnline.add(new Player(entity));
         } catch(Exception e) {
             response.setStatus("ERROR");
             response.setAnswer("Ошибка авторизации...");

@@ -23,11 +23,6 @@ public class Player {
         isCrownPlayer = playerDTO.getIsCrownPlayer();
     }
 
-    public Player(User user) {
-        this.user = user;
-        userName = user.getUserName();
-    }
-
     public User getUser() {
         return user;
     }
