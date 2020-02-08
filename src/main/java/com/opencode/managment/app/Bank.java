@@ -1,13 +1,23 @@
 package com.opencode.managment.app;
 
-import java.util.Random;
+import com.opencode.managment.dto.BuyEsmDTO;
+import com.opencode.managment.dto.SellEgpDTO;
+import javafx.collections.transformation.SortedList;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Bank {
     private Random random;
     private int level = 3;
     private double[][] chanceTable;
 
+    private HashMap<Player, BuyEsmDTO> esmPlayers;
+    private HashMap<Player, SellEgpDTO> egpPlayers;
+
     {
+        esmPlayers = new HashMap<>();
+        egpPlayers = new HashMap<>();
         random = new Random();
         chanceTable = new double[][]{
                 {1.0/3, 1.0/3, 1.0/6, 1.0/12, 1.0/12},
@@ -89,5 +99,57 @@ public class Bank {
                 break;
         }
         return egpCost;
+    }
+
+    public void buyEsm(Player player, BuyEsmDTO buyEsmDTO){
+        esmPlayers.put(player, buyEsmDTO);
+    }
+
+    public void sellEgp(Player player, SellEgpDTO sellEgpDTO){
+        egpPlayers.put(player, sellEgpDTO);
+    }
+
+    /**
+     * Провести торги
+     */
+    public void holdTenders(int playersCount){
+        int esmCount = getEsmNumber(playersCount);
+        Set<Map.Entry<Player, BuyEsmDTO>> esmSet = esmPlayers.entrySet();
+        List<Map.Entry<Player, BuyEsmDTO>> esmList = esmSet.stream().sorted(
+                (o1, o2) -> o2.getValue().getCostEsm() - o1.getValue().getCostEsm())
+                .collect(Collectors.toList());
+        for (Map.Entry<Player, BuyEsmDTO> entry: esmList){
+            if(entry.getValue().getNumberEsm() <= esmCount){
+                entry.getKey().changeEsm(entry.getValue().getNumberEsm());
+                entry.getKey().changeMoney(entry.getValue().getNumberEsm() * entry.getValue().getCostEsm());
+            }
+            else{
+                entry.getKey().changeEsm(esmCount);
+                entry.getKey().changeMoney(esmCount * entry.getValue().getCostEsm());
+            }
+            esmCount -= entry.getValue().getNumberEsm();
+            if(esmCount <= 0) break;
+        }
+
+        int egpCount = getEgpNumber(playersCount);
+        Set<Map.Entry<Player, SellEgpDTO>> egpSet = egpPlayers.entrySet();
+        List<Map.Entry<Player, SellEgpDTO>> egpList = egpSet.stream().sorted(
+                (o1, o2) -> o1.getValue().getCostEgp() - o2.getValue().getCostEgp())
+                .collect(Collectors.toList());
+        for (Map.Entry<Player, SellEgpDTO> entry: egpList){
+            if(entry.getValue().getNumberEgp() <= egpCount){
+                entry.getKey().changeEgp(-entry.getValue().getNumberEgp());
+                entry.getKey().changeMoney(entry.getValue().getNumberEgp() * entry.getValue().getCostEgp());
+            }
+            else{
+                entry.getKey().changeEgp(-egpCount);
+                entry.getKey().changeMoney(egpCount * entry.getValue().getCostEgp());
+            }
+            egpCount -= entry.getValue().getNumberEgp();
+            if(egpCount <= 0) break;
+        }
+
+        esmPlayers.clear();
+        egpPlayers.clear();
     }
 }

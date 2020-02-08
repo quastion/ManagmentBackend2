@@ -78,6 +78,18 @@ public class GameController {
         service.sellEgp(sellEgpDTO);
     }
 
+    @PostMapping("/convertFactory")
+    @ResponseStatus(HttpStatus.OK)
+    public void convertFactory(@RequestBody BuildOrModIntentionDTO buildOrModIntentionDTO){
+        service.convertFactory(buildOrModIntentionDTO);
+    }
+
+    @PostMapping("/build")
+    @ResponseStatus(HttpStatus.OK)
+    public void build(@RequestBody BuildOrModIntentionDTO buildOrModIntentionDTO){
+        service.build(buildOrModIntentionDTO);
+    }
+
     @PostMapping("/getProduct")
     @ResponseStatus(HttpStatus.OK)
     public void getProduct(@RequestBody ProductConversionIntentionDTO productConversionIntentionDTO){

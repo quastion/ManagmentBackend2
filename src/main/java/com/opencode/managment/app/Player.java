@@ -1,11 +1,15 @@
 package com.opencode.managment.app;
 
+import com.opencode.managment.app.factory.Factory;
 import com.opencode.managment.dto.PlayerDTO;
 import com.opencode.managment.entity.User;
 import com.opencode.managment.repository.UserRepository;
 import com.opencode.managment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Player {
     private User user;
@@ -19,16 +23,68 @@ public class Player {
     private int esm = 4;
     private int egp = 2;
     private int money = 10000;
+    private ArrayList<Factory> factoryBuildingQueue;
+
 
     public Player(PlayerDTO playerDTO) {
         userName = playerDTO.getUserName();
         numberInLobby = playerDTO.getNumberInLobby();
         isCrownPlayer = playerDTO.getIsCrownPlayer();
         user = UserService.getRepository().fundByUserName(playerDTO.getUserName());
+        factoryBuildingQueue = new ArrayList<>();
     }
 
     public User getUser() {
         return user;
+    }
+
+    /**
+     * Построить обычную или модернизированную фабрику
+     * @param factoryType
+     */
+    public void buildFactory(Factory.FactoryType factoryType){
+        if(factoryType == Factory.FactoryType.STANDARD && money >= Factory.COST_OF_BUILDING_STANDARD_FACTORY / 2){
+            changeMoney(-Factory.COST_OF_BUILDING_STANDARD_FACTORY / 2);
+            factoryBuildingQueue.add(new Factory(factoryType));
+        } else if(factoryType == Factory.FactoryType.AUTOMATED && money >= Factory.COST_OF_BUILDING_AUTOMATED_FACTORY / 2){
+            changeMoney(-Factory.COST_OF_BUILDING_AUTOMATED_FACTORY / 2);
+            factoryBuildingQueue.add(new Factory(factoryType));
+        }
+    }
+
+    /**
+     * Модернизировать фабрику
+     */
+    public void convertFactory(){
+        if(standardFactoriesCount > 0 && money >= Factory.COST_OF_RECONSTRUCTION_FACTORY / 2){
+            changeMoney(-Factory.COST_OF_RECONSTRUCTION_FACTORY / 2);
+            Factory factory = new Factory(Factory.FactoryType.STANDARD);
+            factory.convertFactory();
+            factoryBuildingQueue.add(factory);
+        }
+    }
+
+    public void updateState(){
+        for(Factory factory : factoryBuildingQueue){
+            factory.updateState();
+            if(factory.getState() == Factory.State.BUILT){
+                if(factory.getFactoryType() == Factory.FactoryType.STANDARD && money >= Factory.COST_OF_BUILDING_STANDARD_FACTORY / 2){
+                    changeMoney(-Factory.COST_OF_BUILDING_STANDARD_FACTORY / 2);
+                    factoryBuildingQueue.remove(factory);
+                    standardFactoriesCount++;
+                } else if(factory.getFactoryType() == Factory.FactoryType.AUTOMATED && money >= Factory.COST_OF_BUILDING_AUTOMATED_FACTORY / 2){
+                    changeMoney(-Factory.COST_OF_BUILDING_AUTOMATED_FACTORY / 2);
+                    factoryBuildingQueue.remove(factory);
+                    automatedFactoriesCount++;
+                }
+            }
+            else if(factory.getState() == Factory.State.CONVERTED && money >= Factory.COST_OF_RECONSTRUCTION_FACTORY / 2){
+                changeMoney(-Factory.COST_OF_RECONSTRUCTION_FACTORY / 2);
+                factoryBuildingQueue.remove(factory);
+                automatedFactoriesCount++;
+                standardFactoriesCount--;
+            }
+        }
     }
 
     public String getUserName() {
@@ -93,5 +149,20 @@ public class Player {
 
     public void changeEgp(int value){
         egp+=value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(user, player.user) &&
+                Objects.equals(userName, player.userName);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(user, userName);
     }
 }

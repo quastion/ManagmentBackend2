@@ -52,14 +52,20 @@ public class GameService {
         return GameDTO.createGameInfo(game);
     }
 
-    // TODO: 08.02.2020 Реализовать торги 
     public void buyEsm(BuyEsmDTO buyEsmDTO){
-
+        game.buyEsm(buyEsmDTO);
     }
 
-    // TODO: 08.02.2020 Реализовать торги
     public void sellEgp(SellEgpDTO sellEgpDTO){
+        game.sellEgp(sellEgpDTO);
+    }
 
+    public void convertFactory(BuildOrModIntentionDTO buildOrModIntentionDTO){
+        game.convertFactory(buildOrModIntentionDTO);
+    }
+
+    public void build(BuildOrModIntentionDTO buildOrModIntentionDTO){
+        game.build(buildOrModIntentionDTO);
     }
 
     // TODO: 08.02.2020 Реализовать 
