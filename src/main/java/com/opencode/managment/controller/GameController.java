@@ -1,9 +1,9 @@
 package com.opencode.managment.controller;
 
-import com.opencode.managment.app.Game;
 import com.opencode.managment.dto.*;
 import com.opencode.managment.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,37 +21,44 @@ public class GameController {
      * Проверка на существование лобби
      */
     @GetMapping("/checkLobby")
-    public LobbyStatusDto checkLobby(){
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody LobbyStatusDto checkLobby(){
         return service.isLobbyCreated();
     }
 
     @PostMapping("/createLobby")
+    @ResponseStatus(HttpStatus.OK)
     public void createLobby(@RequestBody LobbyDTO lobbyDTO){
         service.createLobby(lobbyDTO);
     }
 
     @PostMapping("/joinLobby")
+    @ResponseStatus(HttpStatus.OK)
     public void joinLobby(@RequestBody PlayerDTO playerDTO){
         service.joinLobby(playerDTO);
     }
 
     @PostMapping("/startGame")
+    @ResponseStatus(HttpStatus.OK)
     public void startGame(@RequestBody UnknownDTO unknownDTO){
         service.startGame();
     }
 
     @PostMapping("/destroyGame")
+    @ResponseStatus(HttpStatus.OK)
     public void destroyGame(@RequestBody UnknownDTO unknownDTO){
         service.destroyGame();
     }
 
     @PostMapping("/finishStep")
+    @ResponseStatus(HttpStatus.OK)
     public void finishStep(@RequestBody FinishStepIntentionDTO finishStepIntentionDTO){
         service.finishStep(finishStepIntentionDTO);
     }
 
     @GetMapping("/gameInfo")
-    public GameDTO getGameInfo(){
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody GameDTO getGameInfo(){
         return service.getGameInfo();
     }
 
@@ -60,17 +67,20 @@ public class GameController {
      * @param
      */
     @PostMapping("/buyEsm")
+    @ResponseStatus(HttpStatus.OK)
     public void buyEsm(@RequestBody BuyEsmDTO buyEsmDTO){
         service.buyEsm(buyEsmDTO);
     }
 
     @PostMapping("/sellEgp")
+    @ResponseStatus(HttpStatus.OK)
     public void sellEgp(@RequestBody SellEgpDTO sellEgpDTO){
         service.sellEgp(sellEgpDTO);
     }
 
     @PostMapping("/getProduct")
-    public void getProduct(@RequestBody ProductConversionIntentDTO productConversionIntentDTO){
-        service.getProduct(productConversionIntentDTO);
+    @ResponseStatus(HttpStatus.OK)
+    public void getProduct(@RequestBody ProductConversionIntentionDTO productConversionIntentionDTO){
+        service.getProduct(productConversionIntentionDTO);
     }
 }

@@ -1,6 +1,6 @@
 package com.opencode.managment.dto;
 
-public class ProductConversionIntentDTO {
+public class ProductConversionIntentionDTO {
     private String userName;
     private int numberOfEsmToEgp;
 

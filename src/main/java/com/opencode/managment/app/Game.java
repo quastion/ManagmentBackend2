@@ -35,10 +35,10 @@ public final class Game {
     }
 
     public void payBills(Player player){
-        player.changeMoney(player.getEsm()*COST_PER_ESM_UNIT);
-        player.changeMoney(player.getEgp()*COST_PER_EGP_UNIT);
-        player.changeMoney(player.getStandardFactoriesCount()*COST_PER_STANDARD_FACTORY_UNIT);
-        player.changeMoney(player.getAutomatedFactoriesCount()*COST_PER_AUTOMATED_FACTORY_UNIT);
+        player.changeMoney(-player.getEsm()*COST_PER_ESM_UNIT);
+        player.changeMoney(-player.getEgp()*COST_PER_EGP_UNIT);
+        player.changeMoney(-player.getStandardFactoriesCount()*COST_PER_STANDARD_FACTORY_UNIT);
+        player.changeMoney(-player.getAutomatedFactoriesCount()*COST_PER_AUTOMATED_FACTORY_UNIT);
     }
 
     public boolean isAllPlayersMoved(){

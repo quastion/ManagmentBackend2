@@ -10,11 +10,11 @@ public class Bank {
     {
         random = new Random();
         chanceTable = new double[][]{
-                {1/3, 1/3, 1/6, 1/12, 1/12},
-                {1/4, 1/3, 1/4, 1/12, 1/12},
-                {1/12, 1/4, 1/3, 1/4, 1/12},
-                {1/12, 1/12, 1/4, 1/3, 1/4},
-                {1/12, 1/12, 1/6, 1/3, 1/3}
+                {1.0/3, 1.0/3, 1.0/6, 1.0/12, 1.0/12},
+                {1.0/4, 1.0/3, 1.0/4, 1.0/12, 1.0/12},
+                {1.0/12, 1.0/4, 1.0/3, 1.0/4, 1.0/12},
+                {1.0/12, 1.0/12, 1.0/4, 1.0/3, 1.0/4},
+                {1.0/12, 1.0/12, 1.0/6, 1.0/3, 1.0/3}
         };
     }
 
@@ -23,11 +23,14 @@ public class Bank {
 
         for(int i = 0; i < chanceTable.length; i++){
             if(i + 1 == level){
+                double prevSum = 0;
+                level = chanceTable[i].length;
                 for(int j = 0; j < chanceTable[i].length; j++){
-                    if(chanceTable[i][j] >= chance){
+                    if(prevSum < chance && prevSum + chanceTable[i][j] >= chance){
                         level = j + 1;
                         break;
                     }
+                    prevSum += chanceTable[i][j];
                 }
                 break;
             }

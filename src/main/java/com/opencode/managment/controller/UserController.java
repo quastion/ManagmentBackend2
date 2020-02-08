@@ -4,6 +4,7 @@ import com.opencode.managment.app.Response;
 import com.opencode.managment.entity.User;
 import com.opencode.managment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Response login(@RequestBody User entity){
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody Response login(@RequestBody User entity){
         return service.login(entity);
     }
 

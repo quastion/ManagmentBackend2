@@ -2,6 +2,10 @@ package com.opencode.managment.app;
 
 import com.opencode.managment.dto.PlayerDTO;
 import com.opencode.managment.entity.User;
+import com.opencode.managment.repository.UserRepository;
+import com.opencode.managment.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 public class Player {
     private User user;
@@ -16,11 +20,11 @@ public class Player {
     private int egp = 2;
     private int money = 10000;
 
-
     public Player(PlayerDTO playerDTO) {
         userName = playerDTO.getUserName();
         numberInLobby = playerDTO.getNumberInLobby();
         isCrownPlayer = playerDTO.getIsCrownPlayer();
+        user = UserService.getRepository().fundByUserName(playerDTO.getUserName());
     }
 
     public User getUser() {

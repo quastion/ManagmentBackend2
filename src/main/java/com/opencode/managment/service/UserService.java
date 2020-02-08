@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 @Service
 public class UserService {
-    private UserRepository repository;
+    private static UserRepository repository;
 
     @Autowired
     public void setProductRepository(UserRepository repository) {
@@ -36,5 +36,9 @@ public class UserService {
         }
 
         return response;
+    }
+
+    public static UserRepository getRepository() {
+        return repository;
     }
 }

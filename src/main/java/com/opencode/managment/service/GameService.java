@@ -63,9 +63,9 @@ public class GameService {
     }
 
     // TODO: 08.02.2020 Реализовать 
-    public void getProduct( ProductConversionIntentDTO productConversionIntentDTO){
+    public void getProduct( ProductConversionIntentionDTO productConversionIntentionDTO){
         
     }
 
-    // TODO: 08.02.2020 Реализовать получение ссуды 
+    // TODO: 08.02.2020 Реализовать получение ссуды
 }

@@ -15,6 +15,9 @@ public class User {
     @Column(name = "userAvatar")
     private String userAvatar;
 
+    public User() {
+    }
+
     public User(String userName, String userAvatar) {
         this.userName = userName;
         this.userAvatar = userAvatar;
