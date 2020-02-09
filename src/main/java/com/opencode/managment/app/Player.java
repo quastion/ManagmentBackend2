@@ -1,7 +1,9 @@
 package com.opencode.managment.app;
 
 import com.opencode.managment.app.factory.Factory;
+import com.opencode.managment.dto.LoanDTO;
 import com.opencode.managment.dto.PlayerDTO;
+import com.opencode.managment.dto.ProductConversionIntentionDTO;
 import com.opencode.managment.entity.User;
 import com.opencode.managment.repository.UserRepository;
 import com.opencode.managment.service.UserService;
@@ -12,10 +14,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Player {
+    private static final int LOAN_REPAYMENT_TIME = 12;
+
     private User user;
     private String userName;
     private int numberInLobby;
-    private String isCrownPlayer;
+    private boolean isCrownPlayer;
 
     //Фабрики
     private int standardFactoriesCount = 2;
@@ -25,6 +29,11 @@ public class Player {
     private int money = 10000;
     private ArrayList<Factory> factoryBuildingQueue;
 
+    //Ссуда
+    private int availableLoansCount = 2;
+    private boolean isLoan = false;
+    private int outstandingLoan = 0; //остаток погашения ссуды
+    private int loanRepaymentTime = 0; //время до погашения ссуды
 
     public Player(PlayerDTO playerDTO) {
         userName = playerDTO.getUserName();
@@ -64,7 +73,46 @@ public class Player {
         }
     }
 
-    public void updateState(){
+    public void getProduct( ProductConversionIntentionDTO productConversionIntentionDTO){
+        changeMoney(-productConversionIntentionDTO.getSumOfMoney());
+        changeEsm(-productConversionIntentionDTO.getNumberOfEsmToEgp());
+        changeEgp(productConversionIntentionDTO.getNumberOfEsmToEgp());
+    }
+
+    /**
+     * Размер возможной ссуды
+     * @return
+     */
+    public int availableLoanValue(){
+        return (Factory.COST_OF_BUILDING_STANDARD_FACTORY * standardFactoriesCount +
+                Factory.COST_OF_BUILDING_AUTOMATED_FACTORY * automatedFactoriesCount ) /2;
+    }
+
+    public void getLoan(LoanDTO loanDTO){
+        int loanValue = loanDTO.getLoanValue();
+        if(!isLoan && availableLoansCount > 0 && availableLoanValue() >= loanValue){
+            availableLoansCount--;
+            isLoan = true;
+            outstandingLoan = loanValue;
+            loanRepaymentTime = LOAN_REPAYMENT_TIME;
+            changeMoney(loanValue);
+        }
+    }
+
+    public void updateLoanState(){
+        if(isLoan){
+            changeMoney(-(int)(outstandingLoan * 0.01));
+            loanRepaymentTime--;
+            if(loanRepaymentTime <= 0){
+                isLoan = false;
+                loanRepaymentTime = 0;
+                changeMoney(-outstandingLoan);
+                outstandingLoan = 0;
+            }
+        }
+    }
+
+    public void updateFactoriesStates(){
         for(Factory factory : factoryBuildingQueue){
             factory.updateState();
             if(factory.getState() == Factory.State.BUILT){
@@ -87,6 +135,11 @@ public class Player {
         }
     }
 
+    public void updateState(){
+        updateFactoriesStates();
+        updateLoanState();
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -95,7 +148,11 @@ public class Player {
         return numberInLobby;
     }
 
-    public String getIsCrownPlayer() {
+    public void setCrownPlayer(boolean crownPlayer) {
+        isCrownPlayer = crownPlayer;
+    }
+
+    public boolean getIsCrownPlayer() {
         return isCrownPlayer;
     }
 
@@ -149,6 +206,26 @@ public class Player {
 
     public void changeEgp(int value){
         egp+=value;
+    }
+
+    public boolean isLoan() {
+        return isLoan;
+    }
+
+    public int getAvailableLoansCount() {
+        return availableLoansCount;
+    }
+
+    public int getOutstandingLoan() {
+        return outstandingLoan;
+    }
+
+    public int getLoanRepaymentTime() {
+        return loanRepaymentTime;
+    }
+
+    public void setNumberInLobby(int numberInLobby) {
+        this.numberInLobby = numberInLobby;
     }
 
     @Override

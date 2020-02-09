@@ -3,7 +3,7 @@ package com.opencode.managment.dto;
 public class PlayerDTO {
     private String userName;
     private int numberInLobby;
-    private String isCrownPlayer;
+    private boolean isCrownPlayer;
     private String player; //'имя игрока1',
     private String ava; // строка значения аватарок а1-а10
     private int money; // сколько денег у игрока
@@ -12,6 +12,10 @@ public class PlayerDTO {
     private int esm; // сколько ЕСМ у игрока
     private int egp; // сколько ЕГП у игрока
     private int time; // индивидуальный счетчик времени оствшегося на ход
+    private int availableLoansCount;
+    private boolean isLoan;
+    private int outstandingLoan; //остаток погашения ссуды
+    private int loanRepaymentTime; //время до погашения ссуды
 
     public String getUserName() {
         return userName;
@@ -29,11 +33,11 @@ public class PlayerDTO {
         this.numberInLobby = numberInLobby;
     }
 
-    public String getIsCrownPlayer() {
+    public boolean getIsCrownPlayer() {
         return isCrownPlayer;
     }
 
-    public void setIsCrownPlayer(String isCrownPlayer) {
+    public void setIsCrownPlayer(boolean isCrownPlayer) {
         this.isCrownPlayer = isCrownPlayer;
     }
 
@@ -91,6 +95,38 @@ public class PlayerDTO {
 
     public void setEgp(int egp) {
         this.egp = egp;
+    }
+
+    public boolean getIsLoan() {
+        return isLoan;
+    }
+
+    public void setIsLoan(boolean loan) {
+        isLoan = loan;
+    }
+
+    public int getAvailableLoansCount() {
+        return availableLoansCount;
+    }
+
+    public void setAvailableLoansCount(int availableLoansCount) {
+        this.availableLoansCount = availableLoansCount;
+    }
+
+    public int getOutstandingLoan() {
+        return outstandingLoan;
+    }
+
+    public void setOutstandingLoan(int outstandingLoan) {
+        this.outstandingLoan = outstandingLoan;
+    }
+
+    public int getLoanRepaymentTime() {
+        return loanRepaymentTime;
+    }
+
+    public void setLoanRepaymentTime(int loanRepaymentTime) {
+        this.loanRepaymentTime = loanRepaymentTime;
     }
 
     public int getTime() {

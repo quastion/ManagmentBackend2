@@ -116,16 +116,28 @@ public class Bank {
         int esmCount = getEsmNumber(playersCount);
         Set<Map.Entry<Player, BuyEsmDTO>> esmSet = esmPlayers.entrySet();
         List<Map.Entry<Player, BuyEsmDTO>> esmList = esmSet.stream().sorted(
-                (o1, o2) -> o2.getValue().getCostEsm() - o1.getValue().getCostEsm())
+                (o1, o2) -> {
+                    int res = 0;
+                    if(o2.getValue().getCostEsm() - o1.getValue().getCostEsm() == 0){
+                        if(o1.getKey().getIsCrownPlayer())
+                            res = -1;
+                        if(o2.getKey().getIsCrownPlayer())
+                            res = 1;
+                    }
+                    else{
+                        res = o2.getValue().getCostEsm() - o1.getValue().getCostEsm();
+                    }
+                    return res;
+                })
                 .collect(Collectors.toList());
         for (Map.Entry<Player, BuyEsmDTO> entry: esmList){
             if(entry.getValue().getNumberEsm() <= esmCount){
                 entry.getKey().changeEsm(entry.getValue().getNumberEsm());
-                entry.getKey().changeMoney(entry.getValue().getNumberEsm() * entry.getValue().getCostEsm());
+                entry.getKey().changeMoney(-entry.getValue().getNumberEsm() * entry.getValue().getCostEsm());
             }
             else{
                 entry.getKey().changeEsm(esmCount);
-                entry.getKey().changeMoney(esmCount * entry.getValue().getCostEsm());
+                entry.getKey().changeMoney(-esmCount * entry.getValue().getCostEsm());
             }
             esmCount -= entry.getValue().getNumberEsm();
             if(esmCount <= 0) break;
@@ -134,7 +146,19 @@ public class Bank {
         int egpCount = getEgpNumber(playersCount);
         Set<Map.Entry<Player, SellEgpDTO>> egpSet = egpPlayers.entrySet();
         List<Map.Entry<Player, SellEgpDTO>> egpList = egpSet.stream().sorted(
-                (o1, o2) -> o1.getValue().getCostEgp() - o2.getValue().getCostEgp())
+                (o1, o2) -> {
+                    int res = 0;
+                    if(o1.getValue().getCostEgp() - o2.getValue().getCostEgp() == 0){
+                        if(o1.getKey().getIsCrownPlayer())
+                            res = -1;
+                        if(o2.getKey().getIsCrownPlayer())
+                            res = 1;
+                    }
+                    else{
+                        res = o1.getValue().getCostEgp() - o2.getValue().getCostEgp();
+                    }
+                    return res;
+                })
                 .collect(Collectors.toList());
         for (Map.Entry<Player, SellEgpDTO> entry: egpList){
             if(entry.getValue().getNumberEgp() <= egpCount){

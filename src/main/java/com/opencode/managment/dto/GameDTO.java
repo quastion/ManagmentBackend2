@@ -39,6 +39,12 @@ public class GameDTO {
             playerDTO.setFactory(player.getStandardFactoriesCount());
             playerDTO.setEsm(player.getEsm());
             playerDTO.setEgp(player.getEgp());
+            playerDTO.setIsCrownPlayer(player.getIsCrownPlayer());
+            playerDTO.setAvailableLoansCount(player.getAvailableLoansCount());
+            playerDTO.setIsLoan(player.isLoan());
+            playerDTO.setOutstandingLoan(player.getOutstandingLoan());
+            playerDTO.setLoanRepaymentTime(player.getLoanRepaymentTime());
+            playerDTO.setNumberInLobby(player.getNumberInLobby());
 //            playerDTO.setTime(player.getTime());
             playerDTOS.add(playerDTO);
         }

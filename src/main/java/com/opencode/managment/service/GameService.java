@@ -8,6 +8,8 @@ import com.opencode.managment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 @Service
 public class GameService {
     private UserRepository userRepository;
@@ -68,10 +70,15 @@ public class GameService {
         game.build(buildOrModIntentionDTO);
     }
 
-    // TODO: 08.02.2020 Реализовать 
-    public void getProduct( ProductConversionIntentionDTO productConversionIntentionDTO){
-        
+    public void getProduct(ProductConversionIntentionDTO productConversionIntentionDTO){
+        game.getProduct(productConversionIntentionDTO);
     }
 
-    // TODO: 08.02.2020 Реализовать получение ссуды
+    public GameOverInfoDTO getGameOverInfo(){
+        return game.getGameOverInfo();
+    }
+
+    public void getLoan( LoanDTO loanDTO){
+        game.getLoan(loanDTO);
+    }
 }

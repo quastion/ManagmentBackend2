@@ -90,9 +90,21 @@ public class GameController {
         service.build(buildOrModIntentionDTO);
     }
 
+    @PostMapping("/getLoan")
+    @ResponseStatus(HttpStatus.OK)
+    public void getLoan(@RequestBody LoanDTO loanDTO){
+        service.getLoan(loanDTO);
+    }
+
     @PostMapping("/getProduct")
     @ResponseStatus(HttpStatus.OK)
     public void getProduct(@RequestBody ProductConversionIntentionDTO productConversionIntentionDTO){
         service.getProduct(productConversionIntentionDTO);
+    }
+
+    @GetMapping("/getGameOverInfo")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody GameOverInfoDTO getGameOverInfo(){
+        return service.getGameOverInfo();
     }
 }

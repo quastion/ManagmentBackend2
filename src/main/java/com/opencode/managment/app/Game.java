@@ -1,20 +1,16 @@
 package com.opencode.managment.app;
 
 import com.opencode.managment.app.factory.Factory;
-import com.opencode.managment.dto.BuildOrModIntentionDTO;
-import com.opencode.managment.dto.BuyEsmDTO;
-import com.opencode.managment.dto.PlayerDTO;
-import com.opencode.managment.dto.SellEgpDTO;
+import com.opencode.managment.dto.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public final class Game {
     private static final int COST_PER_ESM_UNIT = 300;
     private static final int COST_PER_EGP_UNIT = 500;
     private static final int COST_PER_STANDARD_FACTORY_UNIT = 1000;
     private static final int COST_PER_AUTOMATED_FACTORY_UNIT = 1500;
+    private static final int MONTHS_LIMIT = 40;
 
     private Lobby lobby;
     private Bank bank;
@@ -24,22 +20,35 @@ public final class Game {
     private int crownPlayer;
     private int currentPlayer;
 
+    private State gameState;
+    private GameOverInfoDTO gameOverInfoDTO;
+
+    public static enum State{
+        GAME_OVER, GAME
+    }
+
     public Game(Lobby lobby) {
         this.lobby = lobby;
         setOfFinishedSteps = new HashSet<>();
         bank = new Bank();
+        gameState = State.GAME;
+        gameOverInfoDTO = new GameOverInfoDTO();
     }
 
     public void step(){
+        if(!isGame()) return;
+
         for(Player player : lobby.getPlayers()){
             payBills(player);
             player.updateState();
         }
         setOfFinishedSteps.clear();
-        increaseCurrentPlayerNumber();
         increaseMonth();
         bank.holdTenders(getPlayersCount());
         bank.randomizeLevel();
+        increaseCrownPlayer();
+        checkPlayersGameOverCondition();
+        checkGameOverCondition();
     }
 
     public void payBills(Player player){
@@ -58,7 +67,10 @@ public final class Game {
      * @param playerName
      */
     public void finishStep(String playerName){
+        if(!isGame()) return;
+
         setOfFinishedSteps.add(playerName);
+        increaseCurrentPlayerNumber();
         if(isAllPlayersMoved()) step();
     }
 
@@ -69,6 +81,13 @@ public final class Game {
     private void increaseCurrentPlayerNumber(){
         currentPlayer++;
         if(currentPlayer >= getPlayersCount()) currentPlayer = 0;
+    }
+
+    private void increaseCrownPlayer(){
+        crownPlayer++;
+        if(crownPlayer >= getPlayersCount()) crownPlayer = 0;
+        for(int i = 0; i < getPlayers().size(); i++) getPlayers().get(i).setCrownPlayer(false);
+        getPlayers().get(crownPlayer).setCrownPlayer(true);
     }
 
     public void buyEsm(BuyEsmDTO buyEsmDTO){
@@ -95,12 +114,53 @@ public final class Game {
         player.buildFactory(buildOrModIntentionDTO.getType() == 0 ? Factory.FactoryType.STANDARD : Factory.FactoryType.AUTOMATED);
     }
 
+    public void getLoan(LoanDTO loanDTO){
+        Player player = getPlayerByNick(getPlayers(), loanDTO.getUserName());
+        if(player == null) return;
+        player.getLoan(loanDTO);
+    }
+
+    public void getProduct( ProductConversionIntentionDTO productConversionIntentionDTO){
+        Player player = getPlayerByNick(getPlayers(), productConversionIntentionDTO.getUserName());
+        if(player == null) return;
+        player.getProduct(productConversionIntentionDTO);
+    }
+
     private Player getPlayerByNick(ArrayList<Player> players, String playerNick){
         for(Player player : players){
             if(player.getUserName().equals(playerNick))
                 return player;
         }
         return null;
+    }
+
+    private void checkGameOverCondition(){
+        if(month >= MONTHS_LIMIT ||
+                getPlayersCount() <= 0){
+            gameState = State.GAME_OVER;
+            gameOverInfoDTO.setEndOfGame(true);
+            getPlayers().sort((o1, o2) -> o1.getMoney() - o2.getMoney());
+            gameOverInfoDTO.getPlayers().addAll(getPlayers());
+            Collections.reverse(gameOverInfoDTO.getPlayers());
+        }
+    }
+
+    private void checkPlayersGameOverCondition(){
+        for(int i = 0; i < getPlayersCount(); i++){
+            Player player = getPlayers().get(i);
+            if(player.getMoney() <= 0){
+                gameOverInfoDTO.getPlayers().add(player);
+                getPlayers().remove(player);
+            }
+        }
+    }
+
+    public GameOverInfoDTO getGameOverInfo(){
+        return gameOverInfoDTO;
+    }
+
+    public boolean isGame(){
+        return gameState == State.GAME;
     }
 
     public Bank getBank() {
