@@ -28,6 +28,13 @@ public class GameService {
     public void joinLobby(PlayerDTO playerDTO){
         if(isLobbyCreated().getStatus() == 0) return;
         lobby.join(new Player(playerDTO));
+        if(lobby.getPlayers().size() >= lobby.getCountOfPlayer()){
+            startGame();
+        }
+    }
+
+    public LobbyDTO getLobbyInfo(){
+        return new LobbyDTO(lobby);
     }
 
     public void startGame(){

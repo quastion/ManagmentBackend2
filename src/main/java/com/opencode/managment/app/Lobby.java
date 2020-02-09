@@ -26,6 +26,7 @@ public class Lobby {
         if(!canJoin()) return;
         player.setNumberInLobby(players.size());
         players.add(player);
+
     }
 
     public boolean canJoin(){

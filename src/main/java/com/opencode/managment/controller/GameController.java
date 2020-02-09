@@ -38,6 +38,12 @@ public class GameController {
         service.joinLobby(playerDTO);
     }
 
+    @GetMapping("/lobbyInfo")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody LobbyDTO getLobbyInfo(){
+        return service.getLobbyInfo();
+    }
+
     @PostMapping("/startGame")
     @ResponseStatus(HttpStatus.OK)
     public void startGame(@RequestBody UnknownDTO unknownDTO){
