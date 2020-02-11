@@ -57,8 +57,9 @@ public class GameService {
     }
 
     public GameDTO getGameInfo(){
-        if(game == null) throw new Error("Игра не создана!");
-        return GameDTO.createGameInfo(game);
+        GameDTO gameDTO = new GameDTO();
+        if(game != null) gameDTO = GameDTO.createGameInfo(game);
+        return gameDTO;
     }
 
     public void buyEsm(BuyEsmDTO buyEsmDTO){
