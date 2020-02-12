@@ -2,12 +2,14 @@ package com.opencode.managment.dto;
 
 import com.opencode.managment.app.Game;
 import com.opencode.managment.app.Player;
+import lombok.Data;
 
 import java.util.ArrayList;
 
 /**
  * Контейнер для данных о игре
  */
+@Data
 public class GameDTO {
     private int month; // текущий месяц (круг)
     private int crownPlayer; // порядковый номер игрока с короной
@@ -45,75 +47,11 @@ public class GameDTO {
             playerDTO.setOutstandingLoan(player.getOutstandingLoan());
             playerDTO.setLoanRepaymentTime(player.getLoanRepaymentTime());
             playerDTO.setNumberInLobby(player.getNumberInLobby());
-//            playerDTO.setTime(player.getTime());
+            playerDTO.setTime(Player.TIME_TO_STEP);
             playerDTOS.add(playerDTO);
         }
         gameDTO.setPlayers(playerDTOS);
 
         return gameDTO;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getCrownPlayer() {
-        return crownPlayer;
-    }
-
-    public void setCrownPlayer(int crownPlayer) {
-        this.crownPlayer = crownPlayer;
-    }
-
-    public int getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public void setCurrentPlayer(int currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-
-    public int getNumberEsm() {
-        return numberEsm;
-    }
-
-    public void setNumberEsm(int numberEsm) {
-        this.numberEsm = numberEsm;
-    }
-
-    public int getCostEsm() {
-        return costEsm;
-    }
-
-    public void setCostEsm(int costEsm) {
-        this.costEsm = costEsm;
-    }
-
-    public int getNumberEgp() {
-        return numberEgp;
-    }
-
-    public void setNumberEgp(int numberEgp) {
-        this.numberEgp = numberEgp;
-    }
-
-    public int getCostEGP() {
-        return costEGP;
-    }
-
-    public void setCostEGP(int costEGP) {
-        this.costEGP = costEGP;
-    }
-
-    public ArrayList<PlayerDTO> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(ArrayList<PlayerDTO> players) {
-        this.players = players;
     }
 }

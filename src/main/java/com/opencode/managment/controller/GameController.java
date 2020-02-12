@@ -59,7 +59,7 @@ public class GameController {
     @PostMapping("/finishStep")
     @ResponseStatus(HttpStatus.OK)
     public void finishStep(@RequestBody FinishStepIntentionDTO finishStepIntentionDTO){
-        service.finishStep(finishStepIntentionDTO);
+         service.finishStep(finishStepIntentionDTO);
     }
 
     @GetMapping("/gameInfo")

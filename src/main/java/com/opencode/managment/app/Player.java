@@ -15,6 +15,7 @@ import java.util.Objects;
 
 public class Player {
     private static final int LOAN_REPAYMENT_TIME = 12;
+    public static final int TIME_TO_STEP = 60;
 
     private User user;
     private String userName;
