@@ -35,7 +35,7 @@ public final class Game {
         gameOverInfoDTO = new GameOverInfoDTO();
     }
 
-    public void step(){
+    private void step(){
         if(!isGame()) return;
 
         for(Player player : lobby.getPlayers()){

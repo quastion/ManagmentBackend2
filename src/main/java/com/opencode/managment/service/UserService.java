@@ -3,6 +3,7 @@ package com.opencode.managment.service;
 import com.opencode.managment.app.Player;
 import com.opencode.managment.app.Response;
 import com.opencode.managment.entity.User;
+import com.opencode.managment.exception.SuchUserAlreadyUseException;
 import com.opencode.managment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.GrantedAuthority;
@@ -23,19 +24,12 @@ public class UserService {
     }
 
     public Response login(User entity) {
-//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-//        entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
-
-        Response response = new Response();
-        try{
-            repository.save(entity);
-            response.setStatus("OK");
-        } catch(Exception e) {
-            response.setStatus("ERROR");
-            response.setAnswer("Ошибка авторизации...");
+        if(repository.fundByUserName(entity.getUserName()) != null){
+            throw new SuchUserAlreadyUseException();
         }
+        repository.save(entity);
 
-        return response;
+        return new Response("OK");
     }
 
     public static UserRepository getRepository() {
