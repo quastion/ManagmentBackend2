@@ -1,6 +1,7 @@
 package com.opencode.managment.configuration;
 
 import com.opencode.managment.dto.ExceptionDTO;
+import com.opencode.managment.exception.CanNotModificateLobbyException;
 import com.opencode.managment.exception.LobbyAlreadyCreatedException;
 import com.opencode.managment.exception.NoDataException;
 import com.opencode.managment.exception.SuchUserAlreadyUseException;
@@ -29,4 +30,8 @@ public class ExceptionResolver extends ResponseEntityExceptionHandler {
         return new ResponseEntity(new ExceptionDTO("Лобби уже создана! Одновременно может существовать только 1 игровая лобби!","Error"), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CanNotModificateLobbyException.class)
+    public ResponseEntity<ExceptionDTO> handleCanNotModificateLobbyException(){
+        return new ResponseEntity(new ExceptionDTO("Не удалось совершить действие над лобби. Возможно уже идет игра.","Error"), HttpStatus.BAD_REQUEST);
+    }
 }

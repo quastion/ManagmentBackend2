@@ -26,7 +26,22 @@ public class Lobby {
         if(!canJoin()) return;
         player.setNumberInLobby(players.size());
         players.add(player);
+    }
 
+    public void leave(Player player){
+        players.remove(getPlayerByNick(players, player.getUserName()));
+        //переупорядочить номера в лобби
+        for(int i = 0; i < players.size(); i++){
+            players.get(i).setNumberInLobby(i);
+        }
+    }
+
+    private Player getPlayerByNick(ArrayList<Player> players, String playerNick){
+        for(Player player : players){
+            if(player.getUserName().equals(playerNick))
+                return player;
+        }
+        return null;
     }
 
     public boolean canJoin(){

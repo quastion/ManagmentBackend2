@@ -4,6 +4,7 @@ import com.opencode.managment.app.Game;
 import com.opencode.managment.app.Lobby;
 import com.opencode.managment.app.Player;
 import com.opencode.managment.dto.*;
+import com.opencode.managment.exception.CanNotModificateLobbyException;
 import com.opencode.managment.exception.LobbyAlreadyCreatedException;
 import com.opencode.managment.exception.NoDataException;
 import com.opencode.managment.repository.UserRepository;
@@ -34,14 +35,32 @@ public class GameService {
         if(lobby == null){
             throw new NoDataException();
         }
-        if(isLobbyCreated().getStatus() == 0) return;
+        if(game != null){
+            throw new CanNotModificateLobbyException();
+        }
         lobby.join(new Player(playerDTO));
         if(lobby.getPlayers().size() >= lobby.getCountOfPlayer()){
             startGame();
         }
     }
 
+    public void leaveLobby(PlayerDTO playerDTO){
+        if(lobby == null){
+            throw new NoDataException();
+        }
+        if(game != null){
+            throw new CanNotModificateLobbyException();
+        }
+        lobby.leave(new Player(playerDTO));
+        if(lobby.getPlayers().size() <= 0){
+            lobby = null;
+        }
+    }
+
     public LobbyDTO getLobbyInfo(){
+        if(lobby == null){
+            throw new NoDataException();
+        }
         return new LobbyDTO(lobby);
     }
 

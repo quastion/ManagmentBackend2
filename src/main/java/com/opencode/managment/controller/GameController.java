@@ -38,6 +38,13 @@ public class GameController {
         service.joinLobby(playerDTO);
     }
 
+    @PostMapping("/leaveLobby")
+    @ResponseStatus(HttpStatus.OK)
+    public void leaveLobby(@RequestBody PlayerDTO playerDTO){
+        service.leaveLobby(playerDTO);
+    }
+
+
     @GetMapping("/lobbyInfo")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody LobbyDTO getLobbyInfo(){
