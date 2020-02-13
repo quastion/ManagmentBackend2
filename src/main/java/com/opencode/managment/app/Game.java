@@ -20,7 +20,7 @@ public final class Game {
     private int crownPlayer;
     private int currentPlayer;
 
-    private State gameState;
+    public State gameState;
     private GameOverInfoDTO gameOverInfoDTO;
 
     public static enum State{
@@ -136,7 +136,7 @@ public final class Game {
 
     private void checkGameOverCondition(){
         if(month >= MONTHS_LIMIT ||
-                getPlayersCount() <= 0){
+                getPlayersCount() <= 1){
             gameState = State.GAME_OVER;
             gameOverInfoDTO.setEndOfGame(true);
             getPlayers().sort((o1, o2) -> o1.getMoney() - o2.getMoney());
@@ -153,6 +153,10 @@ public final class Game {
                 getPlayers().remove(player);
             }
         }
+    }
+
+    public Player getCurrentPlayerEntity(){
+        return lobby.getPlayers().get(currentPlayer);
     }
 
     public GameOverInfoDTO getGameOverInfo(){
@@ -185,5 +189,9 @@ public final class Game {
 
     public ArrayList<Player> getPlayers(){
         return lobby.getPlayers();
+    }
+
+    public State getGameState() {
+        return gameState;
     }
 }

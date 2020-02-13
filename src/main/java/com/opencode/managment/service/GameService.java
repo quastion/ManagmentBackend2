@@ -24,124 +24,128 @@ public class GameService {
         this.userRepository = userRepository;
     }
 
-    public void createLobby(LobbyDTO lobbyDTO){
-        if(lobby != null){
+    public void createLobby(LobbyDTO lobbyDTO) {
+        if (lobby != null) {
             throw new LobbyAlreadyCreatedException();
         }
         lobby = new Lobby(lobbyDTO);
     }
 
-    public void joinLobby(PlayerDTO playerDTO){
-        if(lobby == null){
+    public void joinLobby(PlayerDTO playerDTO) {
+        if (lobby == null) {
             throw new NoDataException();
         }
-        if(game != null){
+        if (game != null) {
             throw new CanNotModificateLobbyException();
         }
         lobby.join(new Player(playerDTO));
-        if(lobby.getPlayers().size() >= lobby.getCountOfPlayer()){
+        if (lobby.getPlayers().size() >= lobby.getCountOfPlayer()) {
             startGame();
         }
     }
 
-    public void leaveLobby(PlayerDTO playerDTO){
-        if(lobby == null){
+    public void leaveLobby(PlayerDTO playerDTO) {
+        if (lobby == null) {
             throw new NoDataException();
         }
-        if(game != null){
+        if (game != null) {
             throw new CanNotModificateLobbyException();
         }
         lobby.leave(new Player(playerDTO));
-        if(lobby.getPlayers().size() <= 0){
+        if (lobby.getPlayers().size() <= 0) {
             lobby = null;
         }
     }
 
-    public LobbyDTO getLobbyInfo(){
-        if(lobby == null){
+    public LobbyDTO getLobbyInfo() {
+        if (lobby == null) {
             throw new NoDataException();
         }
         return new LobbyDTO(lobby);
     }
 
-    public void startGame(){
-        if(lobby == null){
+    public void startGame() {
+        if (lobby == null) {
             throw new NoDataException();
         }
-        if(lobby.canStartGame()){
+        if (lobby.canStartGame()) {
             game = new Game(lobby);
         }
     }
 
-    public void destroyGame(){
+    public void destroyGame() {
         game = null;
         lobby = null;
     }
 
-    public void finishStep(FinishStepIntentionDTO finishStepIntentionDTO){
-        if(game == null){
+    public void finishStep(FinishStepIntentionDTO finishStepIntentionDTO) {
+        if (game == null) {
             throw new NoDataException();
         }
         game.finishStep(finishStepIntentionDTO.getUserName());
     }
 
-    public LobbyStatusDto isLobbyCreated(){
+    public LobbyStatusDto isLobbyCreated() {
         return new LobbyStatusDto(lobby != null ? 1 : 0);
     }
 
-    public GameDTO getGameInfo(){
-        if(game == null){
+    public GameDTO getGameInfo() {
+        if (game == null) {
             throw new NoDataException();
         }
         return GameDTO.createGameInfo(game);
     }
 
-    public void buyEsm(BuyEsmDTO buyEsmDTO){
-        if(game == null){
+    public void buyEsm(BuyEsmDTO buyEsmDTO) {
+        if (game == null) {
             throw new NoDataException();
         }
         game.buyEsm(buyEsmDTO);
     }
 
-    public void sellEgp(SellEgpDTO sellEgpDTO){
-        if(game == null){
+    public void sellEgp(SellEgpDTO sellEgpDTO) {
+        if (game == null) {
             throw new NoDataException();
         }
         game.sellEgp(sellEgpDTO);
     }
 
-    public void convertFactory(BuildOrModIntentionDTO buildOrModIntentionDTO){
-        if(game == null){
+    public void convertFactory(BuildOrModIntentionDTO buildOrModIntentionDTO) {
+        if (game == null) {
             throw new NoDataException();
         }
         game.convertFactory(buildOrModIntentionDTO);
     }
 
-    public void build(BuildOrModIntentionDTO buildOrModIntentionDTO){
-        if(game == null){
+    public void build(BuildOrModIntentionDTO buildOrModIntentionDTO) {
+        if (game == null) {
             throw new NoDataException();
         }
         game.build(buildOrModIntentionDTO);
     }
 
-    public void getProduct(ProductConversionIntentionDTO productConversionIntentionDTO){
-        if(game == null){
+    public void getProduct(ProductConversionIntentionDTO productConversionIntentionDTO) {
+        if (game == null) {
             throw new NoDataException();
         }
         game.getProduct(productConversionIntentionDTO);
     }
 
-    public GameOverInfoDTO getGameOverInfo(){
-        if(game == null){
+    public GameOverInfoDTO getGameOverInfo() {
+        if (game == null) {
             throw new NoDataException();
         }
         return game.getGameOverInfo();
     }
 
-    public void getLoan( LoanDTO loanDTO){
-        if(game == null){
+    public void getLoan(LoanDTO loanDTO) {
+        if (game == null) {
             throw new NoDataException();
         }
         game.getLoan(loanDTO);
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

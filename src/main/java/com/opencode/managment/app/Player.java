@@ -5,22 +5,20 @@ import com.opencode.managment.dto.LoanDTO;
 import com.opencode.managment.dto.PlayerDTO;
 import com.opencode.managment.dto.ProductConversionIntentionDTO;
 import com.opencode.managment.entity.User;
-import com.opencode.managment.repository.UserRepository;
 import com.opencode.managment.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Player {
     private static final int LOAN_REPAYMENT_TIME = 12;
-    public static final int TIME_TO_STEP = 120;
+    public static final int TIME_FOR_STEP = 12;
 
     private User user;
     private String userName;
     private int numberInLobby;
     private boolean isCrownPlayer;
+    private int leftTimeForStep = TIME_FOR_STEP;
 
     //Фабрики
     private int standardFactoriesCount = 2;
@@ -136,9 +134,14 @@ public class Player {
         }
     }
 
+    private void updateLeftTimeForStep(){
+        leftTimeForStep = TIME_FOR_STEP;
+    }
+
     public void updateState(){
         updateFactoriesStates();
         updateLoanState();
+        updateLeftTimeForStep();
     }
 
     public String getUserName() {
@@ -201,6 +204,10 @@ public class Player {
         money+=value;
     }
 
+    public void changeLeftTimeForStep(int value){
+        leftTimeForStep+=value;
+    }
+
     public void changeEsm(int value){
         esm+=value;
     }
@@ -227,6 +234,10 @@ public class Player {
 
     public void setNumberInLobby(int numberInLobby) {
         this.numberInLobby = numberInLobby;
+    }
+
+    public int getLeftTimeForStep() {
+        return leftTimeForStep;
     }
 
     @Override

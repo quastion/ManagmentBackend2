@@ -47,7 +47,7 @@ public class GameDTO {
             playerDTO.setOutstandingLoan(player.getOutstandingLoan());
             playerDTO.setLoanRepaymentTime(player.getLoanRepaymentTime());
             playerDTO.setNumberInLobby(player.getNumberInLobby());
-            playerDTO.setTime(Player.TIME_TO_STEP);
+            playerDTO.setTime(player.getLeftTimeForStep());
             playerDTOS.add(playerDTO);
         }
         gameDTO.setPlayers(playerDTOS);
