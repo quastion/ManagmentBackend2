@@ -38,16 +38,19 @@ public final class Game {
     private void step(){
         if(!isGame()) return;
 
-        for(Player player : lobby.getPlayers()){
+        for(Player player  : lobby.getPlayers()){
             payBills(player);
             player.updateState();
+            checkPlayerGameOverCondition(player);
+        }
+        for(Player player  : gameOverInfoDTO.getPlayers()){
+            lobby.getPlayers().remove(player);
         }
         setOfFinishedSteps.clear();
         increaseMonth();
         bank.holdTenders(getPlayersCount());
         bank.randomizeLevel();
         increaseCrownPlayer();
-        checkPlayersGameOverCondition();
         checkGameOverCondition();
     }
 
@@ -84,6 +87,7 @@ public final class Game {
     }
 
     private void increaseCrownPlayer(){
+        if(getPlayersCount() <= 0) return;
         crownPlayer++;
         if(crownPlayer >= getPlayersCount()) crownPlayer = 0;
         for(int i = 0; i < getPlayers().size(); i++) getPlayers().get(i).setCrownPlayer(false);
@@ -145,13 +149,9 @@ public final class Game {
         }
     }
 
-    private void checkPlayersGameOverCondition(){
-        for(int i = 0; i < getPlayersCount(); i++){
-            Player player = getPlayers().get(i);
-            if(player.getMoney() <= 0){
-                gameOverInfoDTO.getPlayers().add(player);
-                getPlayers().remove(player);
-            }
+    private void checkPlayerGameOverCondition(Player player){
+        if(player.getMoney() <= 0){
+            gameOverInfoDTO.getPlayers().add(player);
         }
     }
 

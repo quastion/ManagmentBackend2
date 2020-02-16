@@ -9,6 +9,7 @@ import com.opencode.managment.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 public class Player {
     private static final int LOAN_REPAYMENT_TIME = 12;
@@ -142,6 +143,10 @@ public class Player {
         updateFactoriesStates();
         updateLoanState();
         updateLeftTimeForStep();
+    }
+
+    public int getBuildingFactoriesCount(){
+        return factoryBuildingQueue.size();
     }
 
     public String getUserName() {

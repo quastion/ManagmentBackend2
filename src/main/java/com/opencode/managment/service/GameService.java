@@ -3,6 +3,7 @@ package com.opencode.managment.service;
 import com.opencode.managment.app.Game;
 import com.opencode.managment.app.Lobby;
 import com.opencode.managment.app.Player;
+import com.opencode.managment.app.bean.GameHistory;
 import com.opencode.managment.dto.*;
 import com.opencode.managment.exception.CanNotModificateLobbyException;
 import com.opencode.managment.exception.LobbyAlreadyCreatedException;
@@ -15,18 +16,21 @@ import java.util.Collections;
 
 @Service
 public class GameService {
-    private UserRepository userRepository;
     private Lobby lobby;
     private Game game;
 
     @Autowired
-    public void setRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private GameHistory gameHistory;
 
     public void createLobby(LobbyDTO lobbyDTO) {
-        if (lobby != null) {
-            throw new LobbyAlreadyCreatedException();
+//        if (lobby != null) {
+//            throw new LobbyAlreadyCreatedException();
+//        }
+        if(game!=null && game.getGameState() == Game.State.GAME_OVER){
+            game = null;
+        }
+        if (game != null) {
+            throw new CanNotModificateLobbyException();
         }
         lobby = new Lobby(lobbyDTO);
     }
@@ -70,6 +74,7 @@ public class GameService {
         }
         if (lobby.canStartGame()) {
             game = new Game(lobby);
+            gameHistory.setGame(game);
         }
     }
 
@@ -90,10 +95,11 @@ public class GameService {
     }
 
     public GameDTO getGameInfo() {
-        if (game == null) {
+
+        if (gameHistory.getGame() == null) {
             throw new NoDataException();
         }
-        return GameDTO.createGameInfo(game);
+        return GameDTO.createGameInfo(gameHistory.getGame());
     }
 
     public void buyEsm(BuyEsmDTO buyEsmDTO) {
@@ -132,10 +138,10 @@ public class GameService {
     }
 
     public GameOverInfoDTO getGameOverInfo() {
-        if (game == null) {
+        if (gameHistory.getGame() == null) {
             throw new NoDataException();
         }
-        return game.getGameOverInfo();
+        return gameHistory.getLastGameResults();
     }
 
     public void getLoan(LoanDTO loanDTO) {

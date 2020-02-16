@@ -1,5 +1,7 @@
-package com.opencode.managment.app;
+package com.opencode.managment.app.bean;
 
+import com.opencode.managment.app.Game;
+import com.opencode.managment.app.Player;
 import com.opencode.managment.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
