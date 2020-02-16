@@ -146,6 +146,7 @@ public final class Game {
             getPlayers().sort((o1, o2) -> o1.getMoney() - o2.getMoney());
             gameOverInfoDTO.getPlayers().addAll(getPlayers());
             Collections.reverse(gameOverInfoDTO.getPlayers());
+            lobby.clear();
         }
     }
 

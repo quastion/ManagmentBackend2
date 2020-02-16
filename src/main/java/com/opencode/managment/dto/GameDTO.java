@@ -49,6 +49,7 @@ public class GameDTO {
             playerDTO.setNumberInLobby(player.getNumberInLobby());
             playerDTO.setTime(player.getLeftTimeForStep());
             playerDTO.setBuildingFactoriesCount(player.getBuildingFactoriesCount());
+            playerDTO.setUpgradingFactoriesCount(player.getUpgradingFactoriesCount());
             playerDTOS.add(playerDTO);
         }
         gameDTO.setPlayers(playerDTOS);

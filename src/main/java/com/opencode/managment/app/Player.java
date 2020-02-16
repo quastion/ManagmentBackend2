@@ -146,7 +146,13 @@ public class Player {
     }
 
     public int getBuildingFactoriesCount(){
-        return factoryBuildingQueue.size();
+        return (int) factoryBuildingQueue.stream()
+                .filter(f -> f.getState() == Factory.State.IN_BUILDING).count();
+    }
+
+    public int getUpgradingFactoriesCount(){
+        return (int) factoryBuildingQueue.stream()
+                .filter(f -> f.getState() == Factory.State.IN_CONVERSION).count();
     }
 
     public String getUserName() {

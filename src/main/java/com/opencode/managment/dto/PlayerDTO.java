@@ -17,6 +17,7 @@ public class PlayerDTO {
     private int outstandingLoan; //остаток погашения ссуды
     private int loanRepaymentTime; //время до погашения ссуды
     private int buildingFactoriesCount;
+    private int upgradingFactoriesCount;
 
     public String getUserName() {
         return userName;
@@ -144,5 +145,13 @@ public class PlayerDTO {
 
     public void setBuildingFactoriesCount(int buildingFactoriesCount) {
         this.buildingFactoriesCount = buildingFactoriesCount;
+    }
+
+    public int getUpgradingFactoriesCount() {
+        return upgradingFactoriesCount;
+    }
+
+    public void setUpgradingFactoriesCount(int upgradingFactoriesCount) {
+        this.upgradingFactoriesCount = upgradingFactoriesCount;
     }
 }

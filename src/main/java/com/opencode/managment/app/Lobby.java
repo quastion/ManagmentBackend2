@@ -44,6 +44,10 @@ public class Lobby {
         return null;
     }
 
+    public void clear(){
+        players = new ArrayList<>();
+    }
+
     public boolean canJoin(){
         return players.size() < 4;
     }
