@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 public class GameHistory {
     private Game game;
 
-    public GameHistory(){
-
-    }
+    public GameHistory(){ }
 
     public void setGame(Game game) {
         this.game = game;
